@@ -140,6 +140,7 @@ app.get('/api/users', async(req, res) => {
     }
 });
 
+//add post
 app.post('/api/posts/', async(req, res) => {
     try {
         console.log("a post request has arrived");
@@ -156,19 +157,7 @@ app.post('/api/posts/', async(req, res) => {
     }
 });
 
-app.get('/api/posts', async (req, res) => {
-    try {
-        console.log("get all posts request has arrived");
-        const posts = await pool.query(
-            "SELECT * FROM posts ORDER BY postdate DESC"
-        );
-        res.json(posts.rows);
-    } catch (err) {
-        console.error(err.message);
-    }
-});
-
-
+// get a post by id
 app.get('/api/posts/:id', async(req, res) => {
     try {
         console.log("get a post with route parameter  request has arrived");
@@ -188,6 +177,7 @@ app.get('/api/posts/:id', async(req, res) => {
     }
 });
 
+//update post by id
 app.put('/api/posts/:id', async(req, res) => {
     try {
         const { id } = req.params;
@@ -202,17 +192,7 @@ app.put('/api/posts/:id', async(req, res) => {
     }
 });
 
-app.delete('/api/posts', async (req, res) => {
-    try {
-        console.log("delete all posts request arrived");
-        await pool.query("DELETE FROM posts");
-        res.json({ message: "All posts deleted" });
-    } catch (err) {
-        console.error(err.message);
-    }
-});
-
-
+// delete a post by id
 app.delete('/api/posts/:id', async(req, res) => {
     try {
         const { id } = req.params;
@@ -227,7 +207,7 @@ app.delete('/api/posts/:id', async(req, res) => {
     }
 });
 
-// 1. FETCH ALL POSTS
+// fetch all posts
 app.get('/api/posts', async(req, res) => {
     try {
         console.log("fetch all posts request has arrived");
@@ -242,7 +222,7 @@ app.get('/api/posts', async(req, res) => {
     }
 });
 
-// 2. DELETE ALL POSTS
+// delete all posts
 app.delete('/api/posts', async(req, res) => {
     try {
         console.log("delete all posts request has arrived");
