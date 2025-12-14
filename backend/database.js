@@ -32,7 +32,7 @@ const createTblQuery = `
     CREATE TABLE IF NOT EXISTS "posts" (
 	    "id" SERIAL PRIMARY KEY,         
 	    "postdate" DATE NOT NULL DEFAULT CURRENT_DATE,
-	    "body" VARCHAR(200) NOT NULL,  
+	    "body" VARCHAR(200) NOT NULL);  
 `;
 
 execute(createTblQuery).then(result => {
