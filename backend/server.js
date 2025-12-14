@@ -156,6 +156,19 @@ app.post('/api/posts/', async(req, res) => {
     }
 });
 
+app.get('/api/posts', async (req, res) => {
+    try {
+        console.log("get all posts request has arrived");
+        const posts = await pool.query(
+            "SELECT * FROM posts ORDER BY postdate DESC"
+        );
+        res.json(posts.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+
 app.get('/api/posts/:id', async(req, res) => {
     try {
         console.log("get a post with route parameter  request has arrived");
@@ -188,6 +201,17 @@ app.put('/api/posts/:id', async(req, res) => {
         console.error(err.message);
     }
 });
+
+app.delete('/api/posts', async (req, res) => {
+    try {
+        console.log("delete all posts request arrived");
+        await pool.query("DELETE FROM posts");
+        res.json({ message: "All posts deleted" });
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
 
 app.delete('/api/posts/:id', async(req, res) => {
     try {

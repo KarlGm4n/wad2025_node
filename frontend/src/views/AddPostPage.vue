@@ -68,6 +68,7 @@ export default {
           })
           .then((data) => {
             console.log(data);
+            alert("Post added successfully!");
             this.$router.push("/");
             //location.assign("/");
           })

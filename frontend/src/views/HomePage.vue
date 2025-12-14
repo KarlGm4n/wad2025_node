@@ -67,8 +67,24 @@ export default {
         console.error('Logout error:', err);
       }
     },
-    deleteAllPosts() {
+    async deleteAllPosts() {
       // TODO: Call backend to delete all posts
+
+      if (!confirm('Delete all posts?')) return;
+
+      try {
+        const response = await fetch('http://localhost:3000/api/posts', {
+          method: 'DELETE',
+          credentials: 'include'
+        });
+        if (!response.ok) {
+          alert('Failed to delete all posts');
+        }
+        this.posts = [];
+      } catch (err) {
+        console.error("Couldn't delete all:", err);
+        alert("Failed to delete all posts.");
+      }
     },
     formatDate(date) {
       const options = { year: 'numeric', month: 'short', day: 'numeric' };
