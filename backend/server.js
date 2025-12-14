@@ -226,3 +226,31 @@ app.delete('/api/posts/:id', async(req, res) => {
         console.error(err.message);
     }
 });
+
+// 1. FETCH ALL POSTS
+app.get('/api/posts', async(req, res) => {
+    try {
+        console.log("fetch all posts request has arrived");
+        // Select all posts, ordered by date (newest first)
+        const allPosts = await pool.query(
+            "SELECT * FROM posts ORDER BY postdate DESC"
+        );
+        res.json(allPosts.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server error");
+    }
+});
+
+// 2. DELETE ALL POSTS
+app.delete('/api/posts', async(req, res) => {
+    try {
+        console.log("delete all posts request has arrived");
+        // Delete every row in the posts table
+        await pool.query("DELETE FROM posts"); 
+        res.status(200).json({ message: "All posts deleted" });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server error");
+    }
+});

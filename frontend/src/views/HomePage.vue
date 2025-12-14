@@ -17,8 +17,8 @@
         <!-- Posts List -->
         <div class="posts-list">
           <div v-for="post in posts" :key="post.id" class="post-card" @click="$router.push(`/posts/${post.id}`)">
-            <div class="post-date">{{ formatDate(post.date) }}</div>
-            <div class="post-content">{{ post.title }}</div>
+            <div class="post-date">{{ formatDate(post.postdate) }}</div>
+            <div class="post-content">{{ post.body }}</div>
           </div>
         </div>
 
@@ -53,9 +53,19 @@ export default {
     };
   },
   mounted() {
-    // TODO: Fetch posts from backend
+    this.fetchPosts();
   },
   methods: {
+    async fetchPosts() {
+      try {
+        const response = await fetch('http://localhost:3000/api/posts');
+        if (response.ok) {
+          this.posts = await response.json();
+        }
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+      }
+    },
     async logout() {
       try {
         await fetch('http://localhost:3000/auth/logout', {
@@ -86,9 +96,20 @@ export default {
         alert("Failed to delete all posts.");
       }
     },
-    formatDate(date) {
+    // Inside methods: { ... }
+
+    formatDate(dateString) {
+      // 1. If the data is missing, stop here
+      if (!dateString) return 'No Date';
+
+      // 2. Parse the ISO string from your JSON
+      const date = new Date(dateString);
+
+      // 3. Formatting options (e.g., Dec 13, 2025)
       const options = { year: 'numeric', month: 'short', day: 'numeric' };
-      return new Date(date).toLocaleDateString('en-US', options);
+      
+      // 4. Return formatted date
+      return date.toLocaleDateString('en-US', options);
     }
   }
 };
