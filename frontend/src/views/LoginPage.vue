@@ -6,27 +6,15 @@
       <div class="form-container">
         <h2 class="form-title">Login</h2>
 
-        <form @submit.prevent="submitLogin" class="post-form">
+        <form @submit.prevent="LogIn" class="post-form">
           <div class="form-group">
             <label for="email" class="form-label">Email</label>
-            <input
-              id="email"
-              v-model="email"
-              type="email"
-              placeholder="Email"
-              class="form-input"
-            />
+            <input id="email" v-model="email" type="email" placeholder="Email" class="form-input" />
           </div>
 
           <div class="form-group">
             <label for="password" class="form-label">Password</label>
-            <input
-              id="password"
-              v-model="password"
-              type="password"
-              placeholder="Password"
-              class="form-input"
-            />
+            <input id="password" v-model="password" type="password" placeholder="Password" class="form-input" />
           </div>
 
           <div class="action-row">
@@ -40,7 +28,7 @@
 
     <AppFooter />
   </div>
-  
+
 </template>
 
 <script>
@@ -57,12 +45,40 @@ export default {
     };
   },
   methods: {
-    submitLogin() {
-      // TODO: hook up to backend auth
-      console.log('Login with:', { email: this.email, password: this.password });
-    }
-  }
-};
+
+    LogIn() {
+      if (!this.email || !this.password) {
+        alert('Please enter both email and password');
+        return;
+      }
+      
+      var data = {
+        email: this.email,
+        password: this.password
+      };
+      // using Fetch - post method - send an HTTP post request to the specified URI with the defined body
+      fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: 'include', //  Don't forget to specify this if you need cookies
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          //this.$router.push("/");
+          location.assign("/");
+        })
+        .catch((e) => {
+          console.log(e);
+          console.log("error");
+        });
+    },
+  },
+}
+
 </script>
 
 <style scoped>
@@ -149,6 +165,11 @@ export default {
   transition: background-color 0.3s ease;
 }
 
-.btn:hover { background-color: #5a8fb8; }
-.or-sep { color: #666; }
+.btn:hover {
+  background-color: #5a8fb8;
+}
+
+.or-sep {
+  color: #666;
+}
 </style>

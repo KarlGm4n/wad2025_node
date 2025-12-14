@@ -56,8 +56,16 @@ export default {
     // TODO: Fetch posts from backend
   },
   methods: {
-    logout() {
-      // TODO: Clear JWT and redirect to login
+    async logout() {
+      try {
+        await fetch('http://localhost:3000/auth/logout', {
+          method: 'GET',
+          credentials: 'include'
+        });
+        this.$router.push('/login');
+      } catch (err) {
+        console.error('Logout error:', err);
+      }
     },
     deleteAllPosts() {
       // TODO: Call backend to delete all posts

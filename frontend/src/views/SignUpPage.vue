@@ -6,27 +6,15 @@
       <div class="form-container">
         <h2 class="form-title">Signup</h2>
 
-        <form @submit.prevent="submitSignup" class="post-form">
+        <form @submit.prevent="SignUp" class="post-form">
           <div class="form-group">
             <label for="email" class="form-label">Email</label>
-            <input
-              id="email"
-              v-model="email"
-              type="email"
-              placeholder="Email"
-              class="form-input"
-            />
+            <input id="email" v-model="email" type="email" placeholder="Email" class="form-input" />
           </div>
 
           <div class="form-group">
             <label for="password" class="form-label">Password</label>
-            <input
-              id="password"
-              v-model="password"
-              type="password"
-              placeholder="Password"
-              class="form-input"
-            />
+            <input id="password" v-model="password" type="password" placeholder="Password" class="form-input" />
           </div>
 
           <div class="action-row">
@@ -54,12 +42,47 @@ export default {
     };
   },
   methods: {
-    submitSignup() {
-      // TODO: call signup API
-      console.log('Signup with:', { email: this.email, password: this.password });
-    }
-  }
-};
+    
+    SignUp() {
+      if (!this.email || !this.password) {
+        alert('Please enter both email and password');
+        return;
+      }
+      
+      var data = {
+        email: this.email,
+        password: this.password
+      };
+      // using Fetch - post method - send an HTTP post request to the specified URI with the defined body
+      fetch("http://localhost:3000/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: 'include', //  Don't forget to specify this if you need cookies
+        body: JSON.stringify(data),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            return response.json().then(err => {
+              throw new Error(err.error || 'Signup failed');
+            });
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          this.$router.push("/");
+          //location.assign("/");
+        })
+        .catch((e) => {
+          console.log(e);
+          alert(e.message);
+        });
+    },
+  },
+}
+
 </script>
 
 <style scoped>
@@ -146,5 +169,7 @@ export default {
   background-color: #5a8fb8;
 }
 
-.or-sep { color: #666; }
+.or-sep {
+  color: #666;
+}
 </style>
